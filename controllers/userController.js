@@ -29,15 +29,37 @@ exports.createUser =  (req, res) => {
     });
 }
 
+// exports.updateUser = (req, res) => {
+//     const {id}= req.params;
+//     const { username, email, password } = req.body;
+//     userModel.findByIdAndUpdate( id , { username, email, password }, {new:true})
+//     .then(user => {
+//         if(!user)throw new Error(`user with ID ${id} not found`);
+//         res.status(200).json({user});
+//     })
+//     .catch(err => res.status(404).json({error:err.message}));
+// }
+
 exports.updateUser = (req, res) => {
     const {id}= req.params;
-    const { username, email, password } = req.body;
-    userModel.findByIdAndUpdate( id , { username, email, password }, {new:true})
-    .then(user => {
-        if(!user)throw new Error(`user with ID ${id} not found`);
-        res.status(200).json({user});
-    })
-    .catch(err => res.status(404).json({error:err.message}));
+    const {username, email,password} = req.body;
+    const saltRounds = 10;
+
+    bcrypt.hash(password, saltRounds, function(err, hash){
+        if(err){
+            res.status(500).json({error:err.message});
+        }
+        else {
+            // const {id}= req.params;
+            // const { username, email, password} = req.body;
+            userModel.findByIdAndUpdate( id , { username, email, password:hash } , {new:true})
+            .then(user => {
+                if(!user)throw new Error(`user with ID ${id} not found`);
+                res.status(200).json({user});
+            })
+            .catch(err => res.status(404).json({error:err.message}));
+        }
+    });
 }
 
 exports.deleteUser = (req, res) => {
