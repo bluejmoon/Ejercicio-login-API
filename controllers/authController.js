@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
-
 const userModel = require("../models/userModel");
+const jwt = require ("jsonwebtoken");
+
 exports.authenticateUser = (req, res) => {
   const {email,password} = req.body;
   userModel
@@ -16,7 +17,11 @@ exports.authenticateUser = (req, res) => {
         }
         else if(result){
             // si la contraseña coincide, el usuario se autentica exitosamente.
-            res.status(200).json({message:"authentication was successful"})
+            const token = jwt.sign(
+                {userId:user._id}, "secreto",
+                {expiresIn:"1h"}
+            )
+            res.status(200).json({message:"authentication was successful. ", token})
         }
         else{
             // si la contraseña no coincide, se devuelve un mensaje de error.

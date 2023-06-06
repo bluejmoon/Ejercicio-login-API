@@ -1,3 +1,5 @@
+// ejemplo básico de uso de bcrypt
+
 const bcrypt = require("bcryptjs");
 
 // cifrado de contraseña

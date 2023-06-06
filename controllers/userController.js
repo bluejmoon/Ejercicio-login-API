@@ -71,3 +71,10 @@ exports.deleteUser = (req, res) => {
     })
     .catch(err => res.status(404).json({error:err.message}));
 }
+
+exports.getUser = (req, res) => {
+    const {email}= req.params;
+    userModel.findOne({email})
+    .then(user => res.json(user))
+    .catch(err => res.status(404).json({error:err.message}));
+}
