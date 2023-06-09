@@ -15,8 +15,9 @@ const fileFilter = (req, file, cb) => {
     if (!allowedTypes.includes(file.mimetype)){
         const error = new Error("Tipo de archivo no admitido");
         error.code = "LIMIT_FILE_TYPES";
+        return cb(error, false)
     }
-    cb(null, true)
+    cb(null, true);
 };
 
 const upload = multer({storage, fileFilter});
