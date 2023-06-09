@@ -5,7 +5,8 @@ const storage = multer.diskStorage({
         cb(null, "uploads/")
     },
     filename: (req, file, cb) => {
-        cb(null, file.filename + "-" + Date.now())
+        const extension = file.mimetype.split('/')[1];
+        cb(null, file.filename + "-" + Date.now() + "." + extension);
     }
 });
 
@@ -20,4 +21,4 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({storage, fileFilter});
 
-export default upload;
+module.exports = {upload}

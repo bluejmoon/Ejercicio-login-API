@@ -6,12 +6,13 @@ const authController = require("../controllers/authController");
 
 //importar el userController
 const userController = require("../controllers/userController");
+const {upload} = require("../middlewares/fileUpload");
 
 router.get('/', userController.getAllUsers);
 
 router.post('/create', userController.createUser);
 
-router.put('/update/:id', userController.updateUser);
+router.put('/update/:id', upload.single("picture"), userController.updateUser);
 
 router.delete('/delete/:id', userController.deleteUser);
 

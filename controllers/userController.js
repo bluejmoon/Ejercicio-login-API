@@ -18,7 +18,8 @@ exports.createUser =  (req, res) => {
             const newUser = new userModel({
                 username,
                 email,
-                password:hash
+                password:hash,
+                picture:""
             });
 
             newUser
@@ -43,6 +44,7 @@ exports.createUser =  (req, res) => {
 exports.updateUser = (req, res) => {
     const {id}= req.params;
     const {username, email,password} = req.body;
+    const avatarFileName = req.file? req.file.filename:null;
     const saltRounds = 10;
 
     bcrypt.hash(password, saltRounds, function(err, hash){
@@ -52,7 +54,7 @@ exports.updateUser = (req, res) => {
         else {
             // const {id}= req.params;
             // const { username, email, password} = req.body;
-            userModel.findByIdAndUpdate( id , { username, email, password:hash } , {new:true})
+            userModel.findByIdAndUpdate( id , { username, email, password:hash, picture:avatarFileName } , {new:true})
             .then(user => {
                 if(!user)throw new Error(`user with ID ${id} not found`);
                 res.status(200).json({user});
