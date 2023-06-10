@@ -17,7 +17,7 @@ router.post('/create', userController.createUser);
 
 router.put('/update/:id', verifyToken, userController.updateUser);
 
-router.delete('/delete/:id', userController.deleteUser);
+router.delete('/delete/:id', verifyToken, userController.deleteUser);
 
 router.post('/login', authController.authenticateUser);
 

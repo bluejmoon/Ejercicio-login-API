@@ -2,6 +2,8 @@ const bcrypt = require("bcryptjs");
 const userModel = require("../models/userModel");
 const jwt = require ("jsonwebtoken");
 require ("dotenv").config(); // otra maners de importar módulos
+const secret = process.env.JWT_SECRET;
+const encodedSecret = Buffer.from(secret).toString("base64");
 
 exports.authenticateUser = (req, res) => {
   const {email,password} = req.body;
@@ -25,7 +27,7 @@ exports.authenticateUser = (req, res) => {
             // si la contraseña coincide, el usuario se autentica exitosamente.
             const token = jwt.sign(
                 payload, 
-                process.env.JWT_SECRET,
+                encodedSecret,
                 {expiresIn:"1h"}
             )
             res.status(200).json({message:"authentication was successful. ", token})
