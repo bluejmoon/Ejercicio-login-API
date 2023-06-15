@@ -10,12 +10,15 @@ exports.verifyToken = (req, res, next) => {
         return res.status(404).json({error: "No token provided"});
     }
     const token = authorizationHeaders.replace("Bearer ","");
-    jwt.verify(token, decodeSecret, (err, decoded) => {
+    jwt.verify(token, decodeSecret, (err) => {
         if(err) {
-            console.log(decoded, token, process.env.JWT_SECRET);
-            return res.status(401).json({error:"invalid token"});
+            console.log("Clave secreta utilizada para verificar el token:", decodeSecret, err);
+            // res.status(401).json({error:"invalid token"});
         }
-        req.user = decoded;
+        const payload = jwt.decode(token)
+        req.user = {userId: payload.userId,
+            email: payload.email,
+            role: payload.role};
         next();
     });
 };

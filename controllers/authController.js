@@ -30,7 +30,8 @@ exports.authenticateUser = (req, res) => {
                 encodedSecret,
                 {expiresIn:"1h"}
             )
-            res.status(200).json({message:"authentication was successful. ", token})
+            res.status(200).json({message:"authentication was successful. ", token});
+            console.log("Clave secreta utilizada para firmar el token:", encodedSecret);
         }
         else{
             // si la contraseña no coincide, se devuelve un mensaje de error.

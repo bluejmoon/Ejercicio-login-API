@@ -21,6 +21,6 @@ router.delete('/delete/:id', verifyToken, userController.deleteUser);
 
 router.post('/login', authController.authenticateUser);
 
-router.get('/:email', userController.getUser)
+router.get('/:email', userController.getUser);
 
 module.exports = router;

@@ -43,7 +43,7 @@ exports.createUser =  (req, res) => {
 
 exports.updateUser = (req, res) => {
     const {id}= req.params;
-    const {username, email,password} = req.body;
+    const {username, email,password, role} = req.body;
     const avatarFileName = req.file ? req.file.filename:null;
     const saltRounds = 10;
 
@@ -52,7 +52,7 @@ exports.updateUser = (req, res) => {
             res.status(500).json({error:err.message});
         }
         else {
-            userModel.findByIdAndUpdate( id , { username, email, password:hash, picture:avatarFileName } , {new:true})
+            userModel.findByIdAndUpdate( id , { username, email, password:hash, picture:avatarFileName, role } , {new:true})
             .then(user => {
                 if(!user)throw new Error(`user with ID ${id} not found`);
                 res.status(200).json({user});
