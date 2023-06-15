@@ -3,7 +3,7 @@ const userModel = require("../models/userModel");
 const jwt = require ("jsonwebtoken");
 require ("dotenv").config(); // otra maners de importar módulos
 const secret = process.env.JWT_SECRET;
-const encodedSecret = Buffer.from(secret).toString("base64");
+// const encodedSecret = Buffer.from(secret).toString("base64");
 
 exports.authenticateUser = (req, res) => {
   const {email,password} = req.body;
@@ -27,11 +27,11 @@ exports.authenticateUser = (req, res) => {
             // si la contraseña coincide, el usuario se autentica exitosamente.
             const token = jwt.sign(
                 payload, 
-                encodedSecret,
+                secret,
                 {expiresIn:"1h"}
             )
             res.status(200).json({message:"authentication was successful. ", token});
-            console.log("Clave secreta utilizada para firmar el token:", encodedSecret);
+            console.log("Clave secreta utilizada para firmar el token:", secret);
         }
         else{
             // si la contraseña no coincide, se devuelve un mensaje de error.
