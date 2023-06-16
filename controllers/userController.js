@@ -1,5 +1,6 @@
 const userModel = require("../models/userModel");
 const bcrypt = require("bcryptjs");
+const fs = require("fs");
 
 exports.getAllUsers = (req, res) => {
     userModel.find()
@@ -59,10 +60,8 @@ exports.updateUser = (req, res) => {
                 role
             };
             if(avatarFile){
-                updateData.picture = {
-                    data: avatarFile.buffer,
-                    contentType: avatarFile.mimetype
-                }
+                const pictureData = avatarFile.buffer
+                updateData.picture = pictureData
             }
             
             userModel.findByIdAndUpdate( id, updateData, {new:true})
