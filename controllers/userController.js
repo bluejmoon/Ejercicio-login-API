@@ -60,8 +60,9 @@ exports.updateUser = (req, res) => {
                 role
             };
             if(avatarFile){
-                const pictureData = avatarFile.buffer
-                updateData.picture = pictureData
+                const picturePath = `uploads/${avatarFile.filename}`;
+                updateData.picture = picturePath;
+                fs.renameSync(avatarFile.path, picturePath)
             }
             
             userModel.findByIdAndUpdate( id, updateData, {new:true})
@@ -93,6 +94,20 @@ exports.deleteUser = (req, res) => {
 exports.getUser = (req, res) => {
     const {email}= req.params;
     userModel.findOne({email})
-    .then(user => res.json(user))
+    .then(user => {
+        if(!user){
+            return res.status(404).json({ error: 'User not found' });
+        }
+        const imagePath = user.picture
+        if(!imagePath){
+            return res.status(404).json({ error: 'Image not found' });
+        }
+        fs.readFile(imagePath,(err,data)=>{
+            if (err) {
+                return res.status(500).json({ error: 'Failed to read image file' });
+            }
+        })
+        data.json(data);
+    })
     .catch(err => res.status(404).json({error:err.message}));
 }
